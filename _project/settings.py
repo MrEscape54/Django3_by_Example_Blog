@@ -106,6 +106,7 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIR = [os.path.join(BASE_DIR, 'static'),]
 
+AUTH_USER_MODEL = 'blog.User'
 
 if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
