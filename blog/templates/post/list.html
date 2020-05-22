@@ -1,0 +1,20 @@
+{% extends 'blog_base.html' %}
+{% load static %}
+
+{% block title %}Listado{% endblock title %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'blog/css/style.css' %}">
+{% endblock css %}
+    
+{% block content %}
+    <h1>Lista de posts</h1>
+    <div class="blog-container">
+        {% for post in posts %}
+            <h5><a href="{{ post.get_absolute_url }}">{{post.title}}</a></h5>
+            {% comment %} DATE FORMATS: https://docs.djangoproject.com/en/3.0/ref/templates/builtins/#date {% endcomment %}
+            <p>Publicado el {{post.publish|date:"j-M-Y"}} por {{post.author.full_name}}</p>
+            {% comment %} https://docs.djangoproject.com/en/3.0/ref/templates/builtins/#truncatechars {% endcomment %}
+            <p>{{post.body|truncatewords:30|linebreaks}}</p>
+        {% endfor %}
+    </ul>
+{% endblock content %}
