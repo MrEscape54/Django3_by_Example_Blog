@@ -1,10 +1,24 @@
-/**
- * Copyright (c) 2020 Diego
- * 
- * This software is released under the MIT License.
- * https://opensource.org/licenses/MIT
- */
+body{
+    background-color: #F7F7F7 !important;
+    font-family: 'Poppins', sans-serif !important;
+}
 
-h1 {
-    color: red;
+a {color: cornflowerblue!important;}
+a:hover {text-decoration: none !important; color: #0062cc !important;}
+
+h1 {color: green;}
+
+.card-body p{color: #535353;}
+.card-title {font-weight: 600;}
+
+small {font-family: 'Roboto', sans-serif !important;}
+
+.card-paragraph{padding-bottom: 30px;}
+
+.card-author {
+    color: black !important;
+    font-size: small;
+    font-weight: 600;
+    position: absolute;
+    bottom: 0px;    
 }
