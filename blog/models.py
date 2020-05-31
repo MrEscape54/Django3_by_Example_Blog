@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.utils import timezone
+from django.utils.timezone import localtime
 from django.urls import reverse
 
 
@@ -33,7 +33,9 @@ class Post(models.Model):
 
     # Para crear una URL canónica de un objeto (links de cada post: ver formato de URLs en el path de details)
     def get_absolute_url(self):
-        return reverse("blog:post_detail", args=[self.publish.year, self.publish.month, self.publish.day, self.slug])
+        #es importante definir local_time para evitar que la URL no se base en UTC y no haya relación entre la fecha en la base y en la URL
+        local_time = localtime(self.publish)
+        return reverse("blog:post_detail", args=[local_time.year, local_time.month, local_time.day, self.slug])
     
     # Este método sirve para poder usarlo en el list_display del admin (sino aparece el atributo username en la columna author)
     def full_name(self):
@@ -49,5 +51,18 @@ class Post(models.Model):
     objects = models.Manager() # The default manager.
     published = PublishedManager() # Our custom manager.
 
+class Comment(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
+    name = models.CharField('nombre', max_length=80)
+    email = models.EmailField()
+    body = models.TextField('cuerpo')
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    active = models.BooleanField('activo', default=True)
 
+    class Meta:
+        ordering = ('created',)
+        
+    def __str__(self):
+        return f'Comment by {self.name} on {self.post}'
 

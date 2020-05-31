@@ -15,10 +15,12 @@ small {font-family: 'Roboto', sans-serif !important;}
 
 .card-paragraph{padding-bottom: 30px;}
 
+.card-ftr{
+    position: absolute;
+    bottom: 0px;   
+}
 .card-author {
     color: black !important;
     font-size: small;
-    font-weight: 600;
-    position: absolute;
-    bottom: 0px;    
+    font-weight: 600; 
 }

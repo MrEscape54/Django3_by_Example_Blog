@@ -15,16 +15,28 @@
                         <div class="card-body">
                             <h5 class="card-title"><a href="{{ post.get_absolute_url }}">{{post.title|capfirst}}</a></h5>
                             {% comment %} DATE FORMATS: https://docs.djangoproject.com/en/3.0/ref/templates/builtins/#date {% endcomment %}
-                            <p class="card-text"><small class="text-muted">{{post.publish|date:"F j, Y"}}</small></p>
+                            <p class="card-text"><small class="text-muted">{{post.publish|date:"F j, Y - G:i"}}</small></p>
                             {% comment %} https://docs.djangoproject.com/en/3.0/ref/templates/builtins/#truncatechars {% endcomment %}
                             <p class="card-text card-paragraph">{{post.body|truncatewords:30}}</p>
-                            <p class="card-author">{{post.author.full_name}}</p>
+                            <div class="card-text card-paragraph">
+                                {% with post.comments.count as total_comments %}
+                                    <p><a href="{{ post.get_absolute_url }}">
+                                            {{ total_comments }} Comentario{{ total_comments|pluralize }}
+                                        </a>
+                                    </p>
+                                {% endwith %}
+                            </div>
+                            <div class="card-ftr">
+                                <a href="{% url "blog:post_share" post.id %}">Compartir</a>
+                                <p class="card-author">{{post.author.full_name}}</p>                                
+                            </div>    
                         </div>
                     </div>
                 </div>
             {% endfor %}
-        </div>   
-        
+        </div>
+
+
     <nav>
         <ul class="pagination">
         {% if page_obj.has_previous %}

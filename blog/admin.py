@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User, Post
+from .models import User, Post, Comment
 
 
 admin.site.register(User, UserAdmin)
@@ -22,6 +22,10 @@ class PostAdmin(admin.ModelAdmin):
     # Opciones de ordenamiento
     ordering = ('status', 'publish')
     
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('name', 'email', 'post', 'created', 'active')
+    list_filter = ('active', 'created', 'updated')
+    search_fields = ('name', 'email', 'body')       
         
-    
 
