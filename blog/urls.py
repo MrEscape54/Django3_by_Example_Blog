@@ -8,6 +8,6 @@ urlpatterns = [
     #path("<int:year>/<str:month>/<int:day>/<slug:post>", views.PostDetailView.as_view(), name="post_detail"),
     path("<int:year>/<int:month>/<int:day>/<slug:post>", views.post_detail, name="post_detail"),
     #path('<int:post_id>/share/', views.post_share, name='post_share'),
-    path('<int:post_id>/share/', views.post_share, name='post_share'),
+    path('<int:post_id>/share/', views.SharePostView.as_view(), name='post_share'),
 
 ]

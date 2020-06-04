@@ -8,7 +8,6 @@ a:hover {text-decoration: none !important; color: #0062cc !important;}
 
 h1 {color: green;}
 
-.card-body p{color: #535353;}
 .card-title {font-weight: 600;}
 
 small {font-family: 'Roboto', sans-serif !important;}
@@ -24,3 +23,82 @@ small {font-family: 'Roboto', sans-serif !important;}
     font-size: small;
     font-weight: 600; 
 }
+
+.post-container{ border-bottom: 0.5px solid grey;}
+
+/* --------------  Related Post ----------------*/
+
+.related-post-container {
+    padding: 72px 36px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.related-comm-title h5 {text-align: center; padding-bottom: 2.5em;}
+
+.card {
+    box-shadow: 0px -2px 67px -19px rgba(0,0,0,0.25);
+    font-family: Roboto, sand-serif;
+    font-size: 15px;
+}
+
+.card-text {color: rgb(119, 119, 119) !important;}
+
+.card-footer {
+    padding: .75rem 1.25rem !important;
+    background-color: white !important;
+    border-top: 0.8px solid rgb(234, 234, 234) !important;
+}
+
+/* --------------Comments Social icons section ----------------*/
+
+.social-container li{padding: 0; margin: 10px;}
+.social-list{list-style: none; justify-content: center; margin-top: 1rem;}
+.social-list i{color: black;}
+
+/* --------------Comments section ----------------*/
+
+.hr-comments {width: 100%;}
+
+.comments-contanier  {
+    padding: 0 !important;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    margin: 0 auto;
+}
+
+.comments-contanier .container-fluid {
+    border-bottom: 0.5px solid grey;
+    background-color: #f7f7f7;
+}
+
+.comments-title h5, .related-comm-title h5{
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 12px;
+    margin: 16px 0;
+}
+
+.comment-replay {float: right; font-size: 13px;}
+
+.comment-area {
+    padding-top: 16px;
+    color: #777777;
+    font-family: Roboto,Sans-Serif;
+    font-size: 15px;
+}
+
+.comment-author {
+    color: black;
+    font-size: 17px;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.comment-time {
+    font-size: 11px;
+}
+
+.comment-body{ padding-bottom: 16px;}

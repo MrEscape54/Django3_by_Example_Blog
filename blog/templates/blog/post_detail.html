@@ -2,32 +2,144 @@
 {% load static %}
 
 {% block title %}{{post.title}}{% endblock title %}
-{% block css %}<link rel="stylesheet" href="{% static 'blog/css/style.css' %}">{% endblock css %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'blog/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'blog/css/contact.css' %}">
+{% endblock css %}
 
 {% block content %}
-    <h1>{{post.title|capfirst}}</h1>
-    <p>{{post.body}}</p>
 
-    {% with comments.count as total_comments %}
-            <h2>{{ total_comments }} Comentario{{ total_comments|pluralize }}</h2>
-    {% endwith %}  
-    {% for comment in comments %}
-    <div class="comment">
-        <p class="info">Commentario {{ forloop.counter }} por {{ comment.name }} {{ comment.created }}</p>
-        {{ comment.body|linebreaks }}
+<div class=" container-fluid post-container">
+    <div>
+        <h1>{{post.title|capfirst}}</h1>
+        <p>{{post.body}}</p>
     </div>
-    {% empty %}
-        <p>No hay comentarios</p>
-    {% endfor %}
+    
+</div>
 
-    {% if new_comment %}
-        <h2>Tu comentario ha sido agregado.</h2>
-    {% else %}
-        <h2>Ingresar comentario</h2>
-        <form method="post" novalidate>
-            {{ comment_form.as_p }}
-            {% csrf_token %}
-            <p><input type="submit" value="Ingrsar"></p>
-        </form>
-    {% endif %}
+
+<div class="container-fluid comments-contanier">
+    <div class="container-fluid">
+        <div class="related-post-container">
+            <div class="related-comm-title">
+                <h5>Publicaciones relacionadas</h5>
+            </div>
+
+            <div class="card-deck">
+                <div class="card">
+                    <img src="..." class="card-img-top" alt="...">
+                    <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                    </div>
+                    <div class="card-footer">
+                    <small class="text-muted">Last updated 3 mins ago</small>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="..." class="card-img-top" alt="...">
+                    <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
+                    </div>
+                    <div class="card-footer">
+                    <small class="text-muted">Last updated 3 mins ago</small>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="..." class="card-img-top" alt="...">
+                    <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
+                    </div>
+                    <div class="card-footer">
+                    <small class="text-muted">Last updated 3 mins ago</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="comments-contanier">
+        <div class="social-container">
+            <ul class="list-group list-group-horizontal social-list">
+                <li><a href="#"></a><i class="fab fa-facebook-f"></i></li>
+                <li><a href="#"></a><i class="fab fa-twitter"></i></li>
+                <li><a href="#"></a><i class="fab fa-pinterest"></i></li>
+                <li><a href="#"></a><i class="fab fa-linkedin-in"></i></li>
+                <li><a href="#"></a><i class="fab fa-xing"></i></li>
+                <li><a href="#"></a><i class="fas fa-paper-plane"></i></li>
+            </ul>
+        </div>
+        <hr class="hr-comments">
+        <div class="comments-title">
+            {% with comments.count as total_comments %}
+            <h5>{{ total_comments }} Comentario{{ total_comments|pluralize }}</h5>
+            {% endwith %}  
+        </div>
+        <hr class="hr-comments">
+        {% for comment in comments %}
+        <div class="comment-area">
+            <a class="comment-replay" href="#comment-form">Responder</a>
+            <p class="comment-author"> {{ comment.name }}</p>
+            <p class="comment-time">{{ comment.created|date:"j F Y - G:i" }}</p>
+            <p class="comment-body">{{ comment.body}}</p>
+        <hr class="hr-comments">    
+        </div>
+        {% empty %}
+            <p>No hay comentarios</p>
+        {% endfor %}
+
+        {% if new_comment %}
+            <h2>Tu comentario ha sido agregado.</h2>
+        {% else %}
+
+        <div class="comments-title">
+            <h5> Comentar</h5>
+        </div>
+
+        <div class="contact">
+            <form method="post" novalidate>
+                {% csrf_token %}
+                <div class="input-group input-group-icon">
+                    {{ comment_form.name }}
+                    <div class="input-icon"><i class="fas fa-user"></i></div>
+                    {% if comment_form.name.errors %}
+                        {{comment_form.name.errors}}
+                    {% endif %}
+                </div>
+
+                <div class="input-group input-group-icon">
+                    {{comment_form.email }}
+                    <div class="input-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div> 
+                    {% if comment_form.email.errors %}
+                        {{comment_form.email.errors}}
+                    {% endif %}
+                </div>
+
+                <div class="msg">
+                    <div class="input-group">{{comment_form.body}}
+                        {% if comment_form.body.errors %}
+                            {{comment_form.body.errors}}
+                        {% endif %} 
+                    </div>
+                </div>
+                
+                <div class="input-group send-reset">
+                    <input type="submit" value="Enviar Comentario" />
+                </div>
+            </form>
+        </div>
+            {% comment %}  <div id="comment-form">
+                <form method="post" novalidate>
+                    {{ comment_form.as_p }}
+                    {% csrf_token %}
+                    <p><input type="submit" value="Ingresar"></p>
+                </form>
+            </div> {% endcomment %}
+            
+        {% endif %}
+    </div>
+</div>
 {% endblock content %}

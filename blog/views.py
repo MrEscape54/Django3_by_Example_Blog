@@ -1,10 +1,10 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView, View
+from django.views.generic.edit import FormView, SingleObjectMixin
 from django.core.mail import send_mail
 
 from .models import Post, User, Comment
 from .forms import EmailPostForm, CommentForm
-
 
 
 class PostListView(ListView):
@@ -52,34 +52,42 @@ def post_detail(request, year, month, day, post):
     return render(request, 'blog/post_detail.html', {'post': post, 'comments': comments,'new_comment': new_comment,'comment_form': comment_form})
 
 def post_share(request, post_id):
-    #retrieve the post by ID and make sure that the retrieved post has a published status
     post = get_object_or_404(Post, id=post_id, status='publicado')
-    # Variable creada para utilizar en el template a través de un success message
-    sent = False
     if request.method == 'POST':
-        # Si el método es POST hay que procesar la información
-        form = EmailPostForm(request.POST) # se crea una instancia de ContactForm con los datos provistos por el dict request.PSOT
+        form = EmailPostForm(request.POST)
         
-        #Método que valida la información del request.POST
         if form.is_valid():
-            cd = form.cleaned_data # si la info es válida, se crea un diccionario "form.cleaned_data" con la info limpia
+            cd = form.cleaned_data
 
-            # Crea el path completo para enviar el link del post
             post_url = request.build_absolute_uri(post.get_absolute_url())
             subject = f"{cd['name']} recommends you read " f"{post.title}"
             message = f"Read {post.title} at {post_url}\n\n" f"{cd['name']}\'s comment: {cd['comment']}"
 
             send_mail(subject, message, 'admin@myblog.com', [cd['to']], fail_silently=True)
-            sent = True
-
-            # fail_silently=False to raise an exception if the email couldn't be sent correctly. 
-            # If the output you see is 1, then your email was successfully sent.
-            # Si la información es válida, redirigimos a index.html
-            #return HttpResponseRedirect('/') # podemos enviar un context al index si lo deseamos
     else:
-        #Si el método no es POST, entonces creamos una instancia del formulario vacio
         form = EmailPostForm()
-    # Si llegamos a esta línea es porque es un GET o el form tiene errores
-    #Si es GET se carga el formulario vacio, si tuvo errores se carga con la info previamente ingresada
-    return render(request, 'blog/post_share.html', {'post': post, 'form': form, 'sent': sent})
+    return render(request, 'blog/post_share.html', {'post': post, 'form': form})
 
+class  PostObjectMixin(object):
+    def get_object(self):
+        post = None
+        post_id = self.kwargs.get('post_id')
+        if post_id is not None:
+            post = get_object_or_404(Post, id=post_id, status='publicado')
+        return post
+
+class SharePostView(PostObjectMixin, FormView):
+    form_class = EmailPostForm
+    template_name = 'blog/post_share.html'
+    success_url = '/blog'
+
+    def get(self, request, *args, **kwargs):
+        post = self.get_object()
+        context = {'post': post, 'form': self.form_class}
+        return render(request, self.template_name, context)    
+
+    def form_valid(self, form):    
+        post = self.get_object()
+        post_url = self.request.build_absolute_uri(post.get_absolute_url())
+        form.send_mail(post, post_url)
+        return super(SharePostView, self).form_valid(form)
