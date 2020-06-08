@@ -1,23 +1,86 @@
 body{
-    background-color: #F7F7F7 !important;
     font-family: 'Poppins', sans-serif !important;
 }
 
-a {color: cornflowerblue!important;}
-a:hover {text-decoration: none !important; color: #0062cc !important;}
+/* ------------------------ index ------------------------ */
 
-h1 {color: green;}
+.fixed-top .form-control {border: 1px solid white !important; height: 2em !important;}
 
-.card-title {font-weight: 600;}
+.fixed-top .btn-outline-success {color: #fff; background-color: #2BA977; border-color: #2BA977; padding: .175rem .75rem;}
 
-small {font-family: 'Roboto', sans-serif !important;}
+.fixed-top .btn-outline-success:hover {color: #fff; background-color: #1c7150; border-color: #1c7150;}
 
-.card-paragraph{padding-bottom: 30px;}
+.main-nav .bg-dark {background-color: black !important;}
 
-.card-ftr{
-    position: absolute;
-    bottom: 0px;   
+.main_nav a{color:#adb5bd !important;}
+
+.fixed-top{padding: .25rem 1rem !important;}
+
+.index-cover{
+    min-height: 100vh;
+    background: url(../img/background.png) no-repeat center;
+    background-size: cover;
+    
 }
+
+.index-cover .navbar-toggler {color: white !important;}
+
+.index-container {
+    max-width: 750px  !important;
+    text-align: center;
+    color: #343a40;
+    padding-top: 60px;
+}
+
+.index-container h1{
+    margin-top: 15px;
+    font-size: 50px;
+    font-family: Poppins;
+    font-weight: 700;
+    letter-spacing: -3.75px;
+}
+
+img[alt="python-logo"] {height: 100px;}
+
+img[alt="django-logo"] {height: 175px; margin-left: 40px;}
+
+img[alt="image-profile"] {height: 120px; border-radius: 50%; border: 4px solid white;}
+
+.main-logos {padding-top: 17px; text-align: center;}
+
+.post-list{margin-top: -35px; width: 76% !important;}
+
+.card-title {color: black; font-size: 24.5px; margin-top: 7px !important; text-align: center;}
+.card-title a{color: black;}
+
+.card-text {text-align: center;}
+.card-paragraph{text-align: initial;}
+
+.card-body {padding: 1.5rem !important;}
+
+.card-body .post-image {height: 40%; margin-bottom: 20px;}
+
+.post-image img {height: 100%; width: 100%;}
+
+.card-paragraph{
+    padding-bottom: 5px;
+    font-size: 14px;
+    line-height: 24px;
+}
+
+.card-last {position: relative; bottom: -20px;}
+
+.card-button{padding: 24px;}
+.card-button button{
+    color: white;
+    font-size: 14px;
+    background-color: black;
+    border: none;
+    line-height: 21px;
+    padding: 5px;
+    min-width: 180px;
+}
+
 .card-author {
     color: black !important;
     font-size: small;
@@ -36,24 +99,27 @@ small {font-family: 'Roboto', sans-serif !important;}
 
 .related-comm-title h5 {text-align: center; padding-bottom: 2.5em;}
 
-.card {
-    box-shadow: 0px -2px 67px -19px rgba(0,0,0,0.25);
-    font-family: Roboto, sand-serif;
-    font-size: 15px;
+.card-index {
+    background-color: #F5F5F5 !important;
+    border: none !important;
+    border-radius: 0 !important;
+    color: black;
+    height: 90vh;
 }
-
-.card-text {color: rgb(119, 119, 119) !important;}
 
 .card-footer {
+    font-size: 13px;
     padding: .75rem 1.25rem !important;
-    background-color: white !important;
+    background-color: #F5F5F5 !important;
     border-top: 0.8px solid rgb(234, 234, 234) !important;
 }
+
+.card-footer a{font-size: 13px;}
 
 /* --------------Comments Social icons section ----------------*/
 
 .social-container li{padding: 0; margin: 10px;}
-.social-list{list-style: none; justify-content: center; margin-top: 1rem;}
+.social-list{list-style: none; justify-content: center; margin-top: 1.5rem;}
 .social-list i{color: black;}
 
 /* --------------Comments section ----------------*/

@@ -5,36 +5,68 @@
 {% block css %}<link rel="stylesheet" href="{% static 'blog/css/style.css' %}">{% endblock css %}
     
 {% block content %}
-<div class="container-fluid">
-    <h1>Lista de posts</h1>
-        <div class="row row-cols-1 row-cols-md-4">
-            {% for post in posts %}
-                <div class="col mb-4">
-                    <div class="card h-100">
-                        {% comment %} <img src="..." class="card-img-top" alt="..."> {% endcomment %}
-                        <div class="card-body">
-                            <h5 class="card-title"><a href="{{ post.get_absolute_url }}">{{post.title|capfirst}}</a></h5>
-                            {% comment %} DATE FORMATS: https://docs.djangoproject.com/en/3.0/ref/templates/builtins/#date {% endcomment %}
-                            <p class="card-text"><small class="text-muted">{{post.publish|date:"F j, Y - G:i"}}</small></p>
-                            {% comment %} https://docs.djangoproject.com/en/3.0/ref/templates/builtins/#truncatechars {% endcomment %}
-                            <p class="card-text card-paragraph">{{post.body|truncatewords:30}}</p>
-                            <div class="card-text card-paragraph">
-                                {% with post.comments.count as total_comments %}
-                                    <p><a href="{{ post.get_absolute_url }}">
-                                            {{ total_comments }} Comentario{{ total_comments|pluralize }}
-                                        </a>
-                                    </p>
-                                {% endwith %}
-                            </div>
-                            <div class="card-ftr">
-                                <a href="{% url "blog:post_share" post.id %}">Compartir</a>
-                                <p class="card-author">{{post.author.full_name}}</p>                                
-                            </div>    
+
+<div class="container-fluid index-cover">
+    <div class="container index-container">
+        <div class="main-logos">
+            <img src="{% static 'blog/img/python-logo.png' %}" alt="python-logo">
+            <img src="{% static 'blog/img/django-logo.png' %}" alt="django-logo">
+        </div>
+        <div>
+            <img src="{% static 'blog/img/pictureProfile.png' %} " alt="image-profile">
+        </div>
+        <div>
+            <h1>Diego Martino Guzmán</h1>
+            <p>Desarrollador Python/Django. Trabajo en una start-up de viajes, la empresa cuenta con un grupo de inversores y un equipo internacional, ademas de un ambiente multicultural muy interesante.</p>
+        </div>
+        <div class="social-container">
+            <ul class="list-group list-group-horizontal social-list">
+                <li><a href="#"></a><i class="fab fa-facebook-f"></i></li>
+                <li><a href="#"></a><i class="fab fa-twitter"></i></li>
+                <li><a href="#"></a><i class="fab fa-pinterest"></i></li>
+                <li><a href="#"></a><i class="fab fa-linkedin-in"></i></li>
+                <li><a href="#"></a><i class="fab fa-xing"></i></li>
+                <li><a href="#"></a><i class="fas fa-paper-plane"></i></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid post-list">
+    <div class="row row-cols-1 row-cols-md-2">
+        {% for post in posts %}
+            <div class="col mb-4">
+                <div class="card card-index">
+                    <div class="card-body">
+                        <h5 class="card-title"><a href="{{ post.get_absolute_url }}">{{post.title|capfirst}}</a></h5>
+                        {% comment %} DATE FORMATS: https://docs.djangoproject.com/en/3.0/ref/templates/builtins/#date {% endcomment %}
+                        <p class="card-text"><small class="text-muted">{{post.publish|date:"F j, Y - G:i"}}</small></p>
+                        {% comment %} https://docs.djangoproject.com/en/3.0/ref/templates/builtins/#truncatechars {% endcomment %}
+                        <div class="post-image">
+                            <img src="{% static 'blog/img/post-img/natureview1.jpg' %} " alt="">
+                        </div>
+                        <div class="card-last">
+                            <p class="card-text card-paragraph">{{post.body|truncatewords:40}}</p>
                         </div>
                     </div>
+                    <div class="card-button">
+                                <a href="{{ post.get_absolute_url }}"><button>Continue reading</button></a>
+                            </div>
+                    <div class="card-footer">
+                        <a href="{% url "blog:post_share" post.id %}">Compartir</a>
+                        {% comment %} <p class="card-author">{{post.author.full_name}}</p>  {% endcomment %}   
+                        <div class="card-text card-paragraph">
+                            {% with post.comments.count as total_comments %}
+                                <a href="{{ post.get_absolute_url }}">
+                                    {{ total_comments }} Comentario{{ total_comments|pluralize }}
+                                </a>
+                            {% endwith %}
+                        </div>                            
+                    </div>    
                 </div>
-            {% endfor %}
-        </div>
+            </div>
+        {% endfor %}
+    </div>
 
 
     <nav>
