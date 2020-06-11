@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, HttpResponseRedirect
 from django.views.generic import ListView, DetailView, View
 from django.views.generic.edit import FormView, SingleObjectMixin
 from django.core.mail import send_mail
+from taggit.models import Tag
 
 from .models import Post, User, Comment
 from .forms import EmailPostForm, CommentForm
@@ -15,28 +16,9 @@ class PostListView(ListView):
     paginate_by = 4
     #template_name is not necessary if template name is post_list and it is at templates/blog
 
-
-""" class PostDetailView(DateDetailView):
-    model = Post
-    context_object_name = 'post'
-    date_field = 'publish'
-    month_format = '%n' 
-    #template_name = "blog/post_detail.html"
-
-     def get_object(self):
-        year = self.kwargs.get('year')
-        month = self.kwargs.get('month')
-        day = self.kwargs.get('day')
-        post = self.kwargs.get('slug')
-        return get_object_or_404(Post, status='publicado', publish__year=year, publish__month=month, publish__day=day, slug=post)
- """
-
 def post_detail(request, year, month, day, post):
     post = get_object_or_404(Post, status='publicado', publish__year=year, publish__month=month, publish__day=day, slug=post)
 
-    class Commet(object):
-        pass
-    
     # List of active comments for this post
     comments = post.comments.filter(active=True)
     new_comment = None

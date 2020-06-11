@@ -8,15 +8,24 @@
 {% endblock css %}
 
 {% block content %}
-
-<div class=" container-fluid post-container">
-    <div>
-        <h1>{{post.title|capfirst}}</h1>
-        <p>{{post.body}}</p>
+<div class="container-fluid post-detail">
+    <div class="row row-cols-1 row-cols-md-1">
+            <div class="col mb-4">
+                <div class="card card-index">
+                    <div class="card-body">
+                        <h5 class="card-title">{{post.title|capfirst}}</h5>
+                        <p class="card-text"><small class="text-muted">{{post.publish|date:"F j, Y - G:i"}}</small></p>
+                        <div class="post-image">
+                            <img src="{% static 'blog/img/post-img/natureview1.jpg' %} " alt="">
+                        </div>
+                        <div class="card-last">
+                            <p class="card-text card-paragraph">{{post.body}}</p>
+                        </div>
+                    </div>  
+                </div>
+            </div>
     </div>
-    
 </div>
-
 
 <div class="container-fluid comments-contanier">
     <div class="container-fluid">

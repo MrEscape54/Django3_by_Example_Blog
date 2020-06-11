@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.timezone import localtime
 from django.urls import reverse
+from taggit.managers import TaggableManager
 
 
 class User(AbstractUser):
@@ -30,6 +31,7 @@ class Post(models.Model):
     # unique_for_date es para prevenir que no se creen slugs iguales el mismo día
     slug = models.SlugField(max_length=100, unique_for_date='publish')
     status = models.CharField(max_length=10, choices=POST_STATUS, default='borrador')
+    tags = TaggableManager()
 
     # Para crear una URL canónica de un objeto (links de cada post: ver formato de URLs en el path de details)
     def get_absolute_url(self):
