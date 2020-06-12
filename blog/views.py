@@ -3,10 +3,32 @@ from django.views.generic import ListView, DetailView, View
 from django.views.generic.edit import FormView, SingleObjectMixin
 from django.core.mail import send_mail
 from taggit.models import Tag
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 from .models import Post, User, Comment
 from .forms import EmailPostForm, CommentForm
 
+
+def post_list(request, tag_slug=None):
+    object_list = Post.published.all()
+    tag = None
+    if tag_slug:
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        object_list = object_list.filter(tags__in=[tag])
+
+    paginator = Paginator(object_list, 4)
+
+    page = request.GET.get('page')
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer deliver the first page
+        posts = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range deliver last page of results
+        posts = paginator.page(paginator.num_pages)
+    context = {'page': page, 'posts': posts,'tag': tag}
+    return render(request, 'blog/post_list.html', context)
 
 class PostListView(ListView):
     # Si ponemos "model = Post" el queryset por default es Post.objects.all()

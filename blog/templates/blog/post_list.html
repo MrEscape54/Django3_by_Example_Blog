@@ -1,11 +1,14 @@
 {% extends 'blog_base.html' %}
 {% load static %}
 
+{% include "pagination.html" with page=posts %}
+
 {% block title %}Listado{% endblock title %}
 {% block css %}<link rel="stylesheet" href="{% static 'blog/css/style.css' %}">{% endblock css %}
     
 {% block content %}
 
+{% if not tag %}
 <div class="container-fluid index-cover">
     <div class="container index-container">
         <div class="main-logos">
@@ -31,8 +34,12 @@
         </div>
     </div>
 </div>
+{% endif %}
 
 <div class="container-fluid post-list">
+    {% if tag %}
+        <h3 class="tag-filter">Posts tagged with: {{ tag.name }}</h3>
+    {% endif %}
     <div class="row row-cols-1 row-cols-md-2">
         {% for post in posts %}
             <div class="col mb-4">
@@ -40,7 +47,7 @@
                     <div class="card-body">
                         <div class="tags">
                             {% for tag in post.tags.all %}
-                                <a href="">{{tag}}</a>
+                                <a href="{% url "blog:post_list_by_tag" tag.slug %}">{{tag.name}}</a>
                             {% endfor %}
                         </div>
                         <h5 class="card-title"><a href="{{ post.get_absolute_url }}">{{post.title|capfirst}}</a></h5>
