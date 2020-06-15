@@ -2,10 +2,10 @@ from django.shortcuts import render, get_object_or_404, HttpResponseRedirect
 from django.views.generic import ListView, DetailView, View
 from django.views.generic.edit import FormView, SingleObjectMixin
 from django.core.mail import send_mail
-from taggit.models import Tag
+from django.db.models import Count
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
-from .models import Post, User, Comment
+from .models import Post, User, Comment, PostTag
 from .forms import EmailPostForm, CommentForm
 
 
@@ -13,21 +13,23 @@ def post_list(request, tag_slug=None):
     object_list = Post.published.all()
     tag = None
     if tag_slug:
-        tag = get_object_or_404(Tag, slug=tag_slug)
+        tag = get_object_or_404(PostTag, slug=tag_slug)
         object_list = object_list.filter(tags__in=[tag])
 
     paginator = Paginator(object_list, 4)
-
-    page = request.GET.get('page')
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
     try:
-        posts = paginator.page(page)
+        posts = paginator.page(page_number)
     except PageNotAnInteger:
         # If page is not an integer deliver the first page
         posts = paginator.page(1)
     except EmptyPage:
         # If page is out of range deliver last page of results
         posts = paginator.page(paginator.num_pages)
-    context = {'page': page, 'posts': posts,'tag': tag}
+
+    context = {'page_number': page_number, 'page_obj': page_obj, 'posts': posts,'tag': tag}
     return render(request, 'blog/post_list.html', context)
 
 class PostListView(ListView):
@@ -41,8 +43,14 @@ class PostListView(ListView):
 def post_detail(request, year, month, day, post):
     post = get_object_or_404(Post, status='publicado', publish__year=year, publish__month=month, publish__day=day, slug=post)
 
-    # List of active comments for this post
+    #Trae los ids de los tags que tiene el post
+    post_tags_ids = post.tags.values_list('id', flat=True)
+    # Trae los post que tienen estos tags y excluye al que se está viendo
+    similar_posts = Post.published.filter(tags__in=post_tags_ids).exclude(id=post.id)
+    similar_posts = similar_posts.annotate(same_tags=Count('tags')).order_by('-same_tags','-publish')[:3]
+
     comments = post.comments.filter(active=True)
+
     new_comment = None
     if request.method == 'POST':
     # A comment was posted
@@ -56,7 +64,9 @@ def post_detail(request, year, month, day, post):
             new_comment.save()
     else: 
         comment_form = CommentForm()
-    return render(request, 'blog/post_detail.html', {'post': post, 'comments': comments,'new_comment': new_comment,'comment_form': comment_form})
+    
+    context = {'post': post, 'comments': comments,'new_comment': new_comment,'comment_form': comment_form, 'similar_posts': similar_posts}
+    return render(request, 'blog/post_detail.html', context)
 
 
 """ def post_share(request, post_id):

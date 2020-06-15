@@ -2,8 +2,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.timezone import localtime
 from django.urls import reverse
-from taggit.managers import TaggableManager
-
+#from taggit.managers import TaggableManager
+#from taggit.models import TaggedItemBase
 
 class User(AbstractUser):
     #Query u.last_name()
@@ -14,6 +14,19 @@ class User(AbstractUser):
 class PublishedManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(status='publicado')
+
+"""class TagPosts(TaggedItemBase):
+    content_object = models.ForeignKey('Post', on_delete=models.CASCADE) """
+
+class PostTag(models.Model):
+    name = models.CharField('nombre', max_length=40)
+    slug = models.SlugField(max_length=40)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Etiqueta'
 
 
 class Post(models.Model):
@@ -30,7 +43,7 @@ class Post(models.Model):
     # unique_for_date es para prevenir que no se creen slugs iguales el mismo día
     slug = models.SlugField(max_length=100, unique_for_date='publish')
     status = models.CharField(max_length=10, choices=POST_STATUS, default='borrador')
-    tags = TaggableManager()
+    tags = models.ManyToManyField(PostTag, blank=True)
 
     # Para crear una URL canónica de un objeto (links de cada post: ver formato de URLs en el path de details)
     def get_absolute_url(self):

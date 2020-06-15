@@ -33,38 +33,21 @@
             <div class="related-comm-title">
                 <h5>Publicaciones relacionadas</h5>
             </div>
-
             <div class="card-deck">
+            {% for post in similar_posts %}
                 <div class="card">
-                    <img src="..." class="card-img-top" alt="...">
                     <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                    <h5 class="card-title"><a href="{{ post.get_absolute_url }}">{{post.title|capfirst}}</a></h5>
+                    <p class="card-text"><small class="text-muted">{{post.publish|date:"F j, Y - G:i"}}</small></p>
+                    <div class="card-last">
+                        <p class="card-text card-paragraph">{{post.body|truncatewords:30}}</p>
+                    </div>
                     </div>
                     <div class="card-footer">
-                    <small class="text-muted">Last updated 3 mins ago</small>
+                    <small class="text-muted">{{post.author.full_name}}</small>
                     </div>
                 </div>
-                <div class="card">
-                    <img src="..." class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
-                    </div>
-                    <div class="card-footer">
-                    <small class="text-muted">Last updated 3 mins ago</small>
-                    </div>
-                </div>
-                <div class="card">
-                    <img src="..." class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
-                    </div>
-                    <div class="card-footer">
-                    <small class="text-muted">Last updated 3 mins ago</small>
-                    </div>
-                </div>
+            {% endfor %}
             </div>
         </div>
     </div>
