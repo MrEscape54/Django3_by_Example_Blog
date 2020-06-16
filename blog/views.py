@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, HttpResponseRedirect
 from django.views.generic import ListView, DetailView, View
 from django.views.generic.edit import FormView, SingleObjectMixin
 
-from django.views.generic.dates import YearArchiveView
+from django.views.generic.dates import YearArchiveView, MonthArchiveView
 
 from django.core.mail import send_mail
 from django.db.models import Count
@@ -67,6 +67,13 @@ class PostYearArchiveView(YearArchiveView):
     date_field = "publish"
     context_object_name = 'posts'
     make_object_list = True
+    paginate_by = 4
+
+class PostMonthArchiveView(MonthArchiveView):
+    queryset = Post.published.all()
+    template_name = 'blog/post_list.html'
+    date_field = "publish"
+    context_object_name = 'posts'
     paginate_by = 4
 
 def post_detail(request, year, month, day, post):

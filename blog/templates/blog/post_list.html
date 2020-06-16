@@ -41,10 +41,11 @@
         <h3 class="tag-filter">Posts tagged with: {{ tag }}</h3>
     {% endif %}
     
-    {% if date_list %}
+    {% if year %}
         <h3 class="tag-filter">Posts published in {{ year|date:"Y" }}</h3>
+    {% elif  month%}
+        	<h3 class="tag-filter">Posts published in {{ month|date:"F, Y" }}</h3>
     {% endif %}
-    
 
     <div class="row row-cols-1 row-cols-md-2">
         {% for post in posts %}
