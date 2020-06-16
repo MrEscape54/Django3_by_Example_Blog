@@ -1,15 +1,17 @@
 from django.shortcuts import render, get_object_or_404, HttpResponseRedirect
 from django.views.generic import ListView, DetailView, View
 from django.views.generic.edit import FormView, SingleObjectMixin
+
+from django.views.generic.dates import YearArchiveView
+
 from django.core.mail import send_mail
 from django.db.models import Count
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 from .models import Post, User, Comment, PostTag
 from .forms import EmailPostForm, CommentForm
 
 
-def post_list(request, tag_slug=None):
+""" def post_list(request, tag_slug=None):
     object_list = Post.published.all()
     tag = None
     if tag_slug:
@@ -19,7 +21,7 @@ def post_list(request, tag_slug=None):
     paginator = Paginator(object_list, 4)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    
+
     try:
         posts = paginator.page(page_number)
     except PageNotAnInteger:
@@ -30,7 +32,7 @@ def post_list(request, tag_slug=None):
         posts = paginator.page(paginator.num_pages)
 
     context = {'page_number': page_number, 'page_obj': page_obj, 'posts': posts,'tag': tag}
-    return render(request, 'blog/post_list.html', context)
+    return render(request, 'blog/post_list.html', context) """
 
 class PostListView(ListView):
     # Si ponemos "model = Post" el queryset por default es Post.objects.all()
@@ -39,6 +41,33 @@ class PostListView(ListView):
     context_object_name = 'posts'
     paginate_by = 4
     #template_name is not necessary if template name is post_list and it is at templates/blog
+
+    #actualizamos el context para incluir el tag (ver template para ver porque)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # si hay kwargs se actualiza el context
+        if self.kwargs:
+            context["tag"] = self.kwargs['tag_slug']
+        return context
+
+    #filtramos los post en caso de que haya filtro por tag (se usa el mismo template con diferentes URLs, ver urls.py)
+    def get_queryset(self):
+        tag = None
+        #si hay kwargs se aplica el filtro
+        if self.kwargs:
+            tag_slug = self.kwargs['tag_slug']
+            tag = get_object_or_404(PostTag, slug=tag_slug)
+            posts = self.queryset.filter(tags__in=[tag])
+            return posts
+        return self.queryset
+
+class PostYearArchiveView(YearArchiveView):
+    queryset = Post.published.all()
+    template_name = 'blog/post_list.html'
+    date_field = "publish"
+    context_object_name = 'posts'
+    make_object_list = True
+    paginate_by = 4
 
 def post_detail(request, year, month, day, post):
     post = get_object_or_404(Post, status='publicado', publish__year=year, publish__month=month, publish__day=day, slug=post)
@@ -81,7 +110,6 @@ def post_detail(request, year, month, day, post):
     else:
         form = EmailPostForm()
     return render(request, 'blog/post_share.html', {'post': post, 'form': form}) """
-
 
 class SharePostView(SingleObjectMixin, FormView): 
     form_class = EmailPostForm

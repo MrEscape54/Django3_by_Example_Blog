@@ -8,7 +8,7 @@
     
 {% block content %}
 
-{% if not tag %}
+{% if not date_list and not tag %}
 <div class="container-fluid index-cover">
     <div class="container index-container">
         <div class="main-logos">
@@ -38,8 +38,14 @@
 
 <div class="container-fluid post-list">
     {% if tag %}
-        <h3 class="tag-filter">Posts tagged with: {{ tag.name }}</h3>
+        <h3 class="tag-filter">Posts tagged with: {{ tag }}</h3>
     {% endif %}
+    
+    {% if date_list %}
+        <h3 class="tag-filter">Posts published in {{ year|date:"Y" }}</h3>
+    {% endif %}
+    
+
     <div class="row row-cols-1 row-cols-md-2">
         {% for post in posts %}
             <div class="col mb-4">
