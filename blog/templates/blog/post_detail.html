@@ -34,7 +34,7 @@
                 <h5>Publicaciones relacionadas</h5>
             </div>
             <div class="card-deck">
-            {% for post in similar_posts %}
+            {% for post in related_posts %}
                 <div class="card">
                     <div class="card-body">
                     <h5 class="card-title"><a href="{{ post.get_absolute_url }}">{{post.title|capfirst}}</a></h5>
@@ -90,47 +90,39 @@
         </div>
 
         <div class="contact">
-            <form method="post" novalidate>
+            <form method="post" action="" novalidate>
                 {% csrf_token %}
                 <div class="input-group input-group-icon">
-                    {{ comment_form.name }}
+                    {{ form.name }}
                     <div class="input-icon"><i class="fas fa-user"></i></div>
-                    {% if comment_form.name.errors %}
-                        {{comment_form.name.errors}}
+                    {% if form.name.errors %}
+                        {{form.name.errors}}
                     {% endif %}
                 </div>
 
                 <div class="input-group input-group-icon">
-                    {{comment_form.email }}
+                    {{form.email }}
                     <div class="input-icon">
                         <i class="fas fa-envelope"></i>
                     </div> 
-                    {% if comment_form.email.errors %}
-                        {{comment_form.email.errors}}
+                    {% if form.email.errors %}
+                        {{form.email.errors}}
                     {% endif %}
                 </div>
 
                 <div class="msg">
-                    <div class="input-group">{{comment_form.body}}
-                        {% if comment_form.body.errors %}
-                            {{comment_form.body.errors}}
+                    <div class="input-group">{{form.body}}
+                        {% if form.body.errors %}
+                            {{form.body.errors}}
                         {% endif %} 
                     </div>
                 </div>
-                
+                <input type="hidden" name="post" value="{{ post.pk }}">
                 <div class="input-group send-reset">
                     <input type="submit" value="Enviar Comentario" />
                 </div>
             </form>
         </div>
-            {% comment %}  <div id="comment-form">
-                <form method="post" novalidate>
-                    {{ comment_form.as_p }}
-                    {% csrf_token %}
-                    <p><input type="submit" value="Ingresar"></p>
-                </form>
-            </div> {% endcomment %}
-            
         {% endif %}
     </div>
 </div>

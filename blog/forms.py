@@ -19,10 +19,11 @@ class EmailPostForm(forms.Form):
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = ('name', 'email', 'body')
+        fields = ('name', 'email', 'body', 'post')
         
         widgets = {
             'name': forms.TextInput(attrs={'placeholder': 'Nombre'}),
             'email': forms.EmailInput(attrs={'placeholder': 'Correo Electrónico'}),
             'body': forms.Textarea(attrs={'placeholder': 'Escribe tu mensaje aquí'}),
+            'post' : forms.HiddenInput(),
         }

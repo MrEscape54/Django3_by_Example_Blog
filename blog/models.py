@@ -2,8 +2,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.timezone import localtime
 from django.urls import reverse
-#from taggit.managers import TaggableManager
-#from taggit.models import TaggedItemBase
 
 class User(AbstractUser):
     #Query u.last_name()
@@ -15,8 +13,6 @@ class PublishedManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(status='publicado')
 
-"""class TagPosts(TaggedItemBase):
-    content_object = models.ForeignKey('Post', on_delete=models.CASCADE) """
 
 class PostTag(models.Model):
     name = models.CharField('nombre', max_length=40)
@@ -49,7 +45,7 @@ class Post(models.Model):
     def get_absolute_url(self):
         #es importante definir local_time para evitar que la URL no se base en UTC y no haya relación entre la fecha en la base y en la URL
         local_time = localtime(self.publish)
-        return reverse("blog:post_detail", args=[local_time.year, local_time.month, local_time.day, self.slug])
+        return reverse("blog:post_date_detail", args=[local_time.year, local_time.month, local_time.day, self.slug])
     
     # Este método sirve para poder usarlo en el list_display del admin (sino aparece el atributo username en la columna author)
     def full_name(self):
@@ -73,6 +69,11 @@ class Comment(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     active = models.BooleanField('activo', default=True)
+
+    def get_absolute_url(self):
+        #es importante definir local_time para evitar que la URL no se base en UTC y no haya relación entre la fecha en la base y en la URL
+        local_time = localtime(self.post.publish)
+        return reverse("blog:post_date_detail", args=[local_time.year, local_time.month, local_time.day, self.post.slug])
 
     class Meta:
         ordering = ('created',)
