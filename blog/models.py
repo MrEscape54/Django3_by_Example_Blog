@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.timezone import localtime
 from django.urls import reverse
+from tinymce import models as tinymice_models
 
 class User(AbstractUser):
     #Query u.last_name()
@@ -29,7 +30,7 @@ class Post(models.Model):
     POST_STATUS = (('borrador', 'Borrador'), ('publicado', 'Publicado'))
 
     title = models.CharField('titulo', max_length=100)
-    body = models.TextField('cuerpo')
+    body = tinymice_models.HTMLField('cuerpo')
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blog_posts', verbose_name='autor')
     # auto_now_add es para que se agregue el campo solo cuando se crea el objeto
     created = models.DateTimeField('creado', auto_now_add=True)

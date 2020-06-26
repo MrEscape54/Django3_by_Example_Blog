@@ -64,8 +64,8 @@
                         <div class="post-image">
                             <img src="{% static 'blog/img/post-img/natureview1.jpg' %} " alt="">
                         </div>
-                        <div class="card-last">
-                            <p class="card-text card-paragraph">{{post.body|truncatewords:40}}</p>
+                        <div class="card-last card-text card-paragraph">
+                            {{post.body|truncatewords:40|safe|striptags}}
                         </div>
                     </div>
                     <div class="card-button">

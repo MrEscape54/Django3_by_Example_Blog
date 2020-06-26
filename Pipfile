@@ -9,6 +9,7 @@ verify_ssl = true
 django = "~=3.0.0"
 psycopg2 = "*"
 python-decouple = "*"
+django-tinymce = "*"
 
 [requires]
 python_version = "3.8"

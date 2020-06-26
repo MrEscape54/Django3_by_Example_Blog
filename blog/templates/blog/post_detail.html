@@ -19,7 +19,7 @@
                             <img src="{% static 'blog/img/post-img/natureview1.jpg' %} " alt="">
                         </div>
                         <div class="card-last">
-                            <p class="card-text card-paragraph">{{post.body}}</p>
+                            <p class="card-text card-paragraph">{{post.body|safe}}</p>
                         </div>
                     </div>  
                 </div>
