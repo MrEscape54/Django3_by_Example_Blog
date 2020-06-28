@@ -16,7 +16,7 @@
                         <h5 class="card-title">{{post.title|capfirst}}</h5>
                         <p class="card-text"><small class="text-muted">{{post.publish|date:"F j, Y - G:i"}}</small></p>
                         <div class="post-image">
-                            <img src="{% static 'blog/img/post-img/natureview1.jpg' %} " alt="">
+                            <img src="{{ post.image.url }} " alt="">
                         </div>
                         <div class="card-last">
                             <p class="card-text card-paragraph">{{post.body|safe}}</p>
@@ -40,7 +40,7 @@
                     <h5 class="card-title"><a href="{{ post.get_absolute_url }}">{{post.title|capfirst}}</a></h5>
                     <p class="card-text"><small class="text-muted">{{post.publish|date:"F j, Y - G:i"}}</small></p>
                     <div class="card-last">
-                        <p class="card-text card-paragraph">{{post.body|truncatewords:30}}</p>
+                        <p class="card-text card-paragraph">{{post.body|truncatewords:30|safe|striptags}}</p>
                     </div>
                     </div>
                     <div class="card-footer">

@@ -62,7 +62,7 @@
                         <p class="card-text"><small class="text-muted">{{post.publish|date:"F j, Y - G:i"}}</small></p>
                         {% comment %} https://docs.djangoproject.com/en/3.0/ref/templates/builtins/#truncatechars {% endcomment %}
                         <div class="post-image">
-                            <img src="{% static 'blog/img/post-img/natureview1.jpg' %} " alt="">
+                            <img src="{{ post.image.url }} " alt="">
                         </div>
                         <div class="card-last card-text card-paragraph">
                             {{post.body|truncatewords:40|safe|striptags}}

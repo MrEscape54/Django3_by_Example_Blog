@@ -10,6 +10,7 @@ django = "~=3.0.0"
 psycopg2 = "*"
 python-decouple = "*"
 django-tinymce = "*"
+pillow = "*"
 
 [requires]
 python_version = "3.8"

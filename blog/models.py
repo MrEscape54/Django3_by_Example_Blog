@@ -41,6 +41,7 @@ class Post(models.Model):
     slug = models.SlugField(max_length=100, unique_for_date='publish')
     status = models.CharField(max_length=10, choices=POST_STATUS, default='borrador')
     tags = models.ManyToManyField(PostTag, blank=True)
+    image = models.ImageField(upload_to='post-images', null=True)
 
     # Para crear una URL canónica de un objeto (links de cada post: ver formato de URLs en el path de details)
     def get_absolute_url(self):
