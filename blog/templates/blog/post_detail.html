@@ -64,23 +64,34 @@
         </div>
         <hr class="hr-comments">
         <div class="comments-title">
-            {% with comments.count as total_comments %}
+            {% with post.get_number_of_comments as total_comments %}
             <h5>{{ total_comments }} Comentario{{ total_comments|pluralize }}</h5>
             {% endwith %}  
         </div>
         <hr class="hr-comments">
         {% for comment in comments %}
-        <div class="comment-area">
-            <a class="comment-replay" href="#comment-form">Responder</a>
-            <p class="comment-author"> {{ comment.name }}</p>
-            <p class="comment-time">{{ comment.created|date:"j F Y - G:i" }}</p>
-            <p class="comment-body">{{ comment.body}}</p>
-        <hr class="hr-comments">    
-        </div>
+            {% if comment.reply is null %}
+            <div class="comment-area">
+                <a class="comment-replay" href="#comment-form">Responder</a>
+                <p class="comment-author"> {{ comment.name }}</p>
+                <p class="comment-time">{{ comment.created|date:"j F Y - G:i" }}</p>
+                <p class="comment-body">{{ comment.body}}</p>
+                <hr class="hr-comments">
+                {% if comment.replies %}
+                    <div class="comment-response">
+                        {% for reply in comment.replies.all %}
+                            <a class="comment-replay" href="#comment-form">Responder</a>
+                            <p class="comment-author"> {{ reply.name }}</p>
+                            <p class="comment-time">{{ comment.created|date:"j F Y - G:i" }}</p>
+                            <p class="comment-body">{{ reply.body}}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            {% endif %}
         {% empty %}
             <p>No hay comentarios</p>
         {% endfor %}
-
         {% if new_comment %}
             <h2>Tu comentario ha sido agregado.</h2>
         {% else %}
@@ -89,7 +100,7 @@
             <h5> Comentar</h5>
         </div>
 
-        <div class="contact">
+        <div class="contact" id="comment-form">
             <form method="post" action="" novalidate>
                 {% csrf_token %}
                 <div class="input-group input-group-icon">

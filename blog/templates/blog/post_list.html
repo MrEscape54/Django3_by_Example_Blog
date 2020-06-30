@@ -75,7 +75,7 @@
                         <a href="{% url "blog:post_share" post.id %}">Compartir</a>
                         {% comment %} <p class="card-author">{{post.author.full_name}}</p>  {% endcomment %}   
                         <div class="card-text card-paragraph">
-                            {% with post.comments.count as total_comments %}
+                            {% with post.get_number_of_comments as total_comments %}
                                 <a href="{{ post.get_absolute_url }}">
                                     {{ total_comments }} Comentario{{ total_comments|pluralize }}
                                 </a>

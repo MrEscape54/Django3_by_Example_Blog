@@ -10,10 +10,6 @@ class User(AbstractUser):
         return f'{self.last_name.capitalize()}, {self.first_name.capitalize()}'
 
 
-class PublishedManager(models.Manager):
-    def get_queryset(self):
-        return super().get_queryset().filter(status='publicado')
-
 
 class PostTag(models.Model):
     name = models.CharField('nombre', max_length=40)
@@ -24,6 +20,10 @@ class PostTag(models.Model):
 
     class Meta:
         verbose_name = 'Etiqueta'
+
+class PublishedManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(status='publicado')
 
 
 class Post(models.Model):
@@ -54,6 +54,13 @@ class Post(models.Model):
         return f'{self.author.last_name.capitalize()}, {self.author.first_name.capitalize()}'
     full_name.short_description = 'Autor'
 
+    # Sirve para traer solo comentarios activos y sin contar las respuestas a estos.
+    def get_number_of_comments(self):
+        try:
+            return self.comments.filter(active=True).filter(reply__isnull=True).count()
+        except :
+            return None
+
     class Meta:
         ordering = ('-publish',)
 
@@ -63,11 +70,16 @@ class Post(models.Model):
     objects = models.Manager() # The default manager.
     published = PublishedManager() # Our custom manager.
 
+class ActiveManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(active=True)
+
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
     name = models.CharField('nombre', max_length=80)
     email = models.EmailField()
     body = models.TextField('comentario')
+    reply = models.ForeignKey('self', null=True, on_delete=models.CASCADE, related_name='replies', blank=True, verbose_name='respuesta')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     active = models.BooleanField('activo', default=True)
@@ -83,3 +95,5 @@ class Comment(models.Model):
     def __str__(self):
         return f'Comment by {self.name} on {self.post}'
 
+    objects = models.Manager() # The default manager.
+    actives = ActiveManager() # Our custom manager.

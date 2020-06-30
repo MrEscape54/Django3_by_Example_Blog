@@ -90,12 +90,13 @@ class PostDateDetailView(DateDetailView):
         comments = obj.comments.filter(active=True)
         context["comments"] = comments
         context['post_id'] =  obj.pk
+
         # Agregamos el form de comentarios al context (solo para GET)
         context['form'] = CommentForm()
         return context
 
 class NewComment(CreateView):
-    model = Comment
+    queryset = Comment.actives.all()
     template_name = 'blog/post_detail.html'
     form_class = CommentForm
 
